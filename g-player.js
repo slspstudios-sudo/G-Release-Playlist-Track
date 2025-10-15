@@ -1,87 +1,64 @@
-const defaultCover = "https://slspstudios-sudo.github.io/G-Release-Track/dummyemptyphoto.jpg";
-let currentIndex = 0;
-let isPlaying = false;
-let repeatMode = "off"; // off | one | all
-let shuffle = false;
+public void initUI() {
 
-const audio = new Audio();
+        //Setting songName Label to center
+        songName = new JLabel("", SwingConstants.CENTER);
 
-function loadSong(song) {
-  document.getElementById("title").textContent = song.title;
-  document.getElementById("artist").textContent = song.artist;
-  const cover = document.getElementById("cover-img");
-  cover.src = song.cover || defaultCover;
-  cover.onerror = () => (cover.src = defaultCover);
-  audio.src = song.src;
+        //Creating button for selecting a song
+        select = new JButton("Select Mp3");
+
+        //Creating Panels
+        playerPanel = new JPanel(); //Music Selection Panel
+        controlPanel = new JPanel(); //Control Selection Panel
+
+        //Creating icons for buttons
+        iconPlay = new ImageIcon("C:\\Users\\DataFlair\\Downloads\\play-button.png");
+        iconPause = new ImageIcon("C:\\Users\\DataFlair\\Downloads\\pause-button.png");
+        iconResume = new ImageIcon("C:\\Users\\DataFlair\\Downloads\\resume-button.png");
+        iconStop = new ImageIcon("C:\\Users\\DataFlair\\Downloads\\stop-button.png");
+
+        //Creating image buttons
+        play = new JButton(iconPlay);
+        pause = new JButton(iconPause);
+        resume = new JButton(iconResume);
+        stop = new JButton(iconStop);
+
+        //Setting Layout of PlayerPanel
+        playerPanel.setLayout(new GridLayout(2, 1));
+
+        //Addings components in PlayerPanel
+        playerPanel.add(select);
+        playerPanel.add(songName);
+
+        //Setting Layout of ControlPanel
+        controlPanel.setLayout(new GridLayout(1, 4));
+
+        //Addings components in ControlPanel
+        controlPanel.add(play);
+        controlPanel.add(pause);
+        controlPanel.add(resume);
+        controlPanel.add(stop);
+
+        //Setting buttons background color
+        play.setBackground(Color.WHITE);
+        pause.setBackground(Color.WHITE);
+        resume.setBackground(Color.WHITE);
+        stop.setBackground(Color.WHITE);
+
+        //Initialing the frame
+        frame = new JFrame();
+
+        //Setting Frame's Title
+        frame.setTitle("DataFlair's Music Player");
+
+        //Adding panels in Frame
+        frame.add(playerPanel, BorderLayout.NORTH);
+        frame.add(controlPanel, BorderLayout.SOUTH);
+
+        //Setting Frame background color
+        frame.setBackground(Color.white);
+        frame.setSize(400, 200);
+        frame.setVisible(true);
+        frame.setResizable(false);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
 }
-
-function playSong() {
-  audio.play();
-  isPlaying = true;
-  document.getElementById("play").textContent = "⏸️";
-}
-
-function pauseSong() {
-  audio.pause();
-  isPlaying = false;
-  document.getElementById("play").textContent = "▶️";
-}
-
-function stopSong() {
-  audio.pause();
-  audio.currentTime = 0;
-  isPlaying = false;
-  document.getElementById("play").textContent = "▶️";
-}
-
-function nextSong() {
-  if (shuffle) currentIndex = Math.floor(Math.random() * playlist.length);
-  else currentIndex = (currentIndex + 1) % playlist.length;
-  loadSong(playlist[currentIndex]);
-  if (isPlaying) playSong();
-}
-
-function prevSong() {
-  currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
-  loadSong(playlist[currentIndex]);
-  if (isPlaying) playSong();
-}
-
-function toggleRepeat() {
-  const btn = document.getElementById("repeat");
-  if (repeatMode === "off") {
-    repeatMode = "one";
-    btn.textContent = "🔁1";
-  } else if (repeatMode === "one") {
-    repeatMode = "all";
-    btn.textContent = "🔁∞";
-  } else {
-    repeatMode = "off";
-    btn.textContent = "🔁";
-  }
-}
-
-function toggleShuffle() {
-  shuffle = !shuffle;
-  document.getElementById("shuffle").style.color = shuffle ? "#0af" : "#fff";
-}
-
-function setVolume(v) {
-  audio.volume = v;
-}
-
-audio.addEventListener("ended", () => {
-  if (repeatMode === "one") playSong();
-  else if (repeatMode === "all") nextSong();
-});
-
-window.onload = () => {
-  loadSong(playlist[currentIndex]);
-  document.getElementById("play").onclick = () => (isPlaying ? pauseSong() : playSong());
-  document.getElementById("stop").onclick = stopSong;
-  document.getElementById("next").onclick = nextSong;
-  document.getElementById("prev").onclick = prevSong;
-  document.getElementById("repeat").onclick = toggleRepeat;
-  document.getElementById("shuffle").onclick = toggleShuffle;
-  document.getElementById("volume").oninput = e => setVolume(e.target.value);
-};
