@@ -1,11 +1,10 @@
 // Playlist sa 3 dummy pjesme
 const playlist = [
   {
-    title: "Dummy Playlist Song 1",
-    artist: "Artist A",
-    cover: "https://via.placeholder.com/200x200?text=Cover1",
-    src: "https://via.placeholder.com/3.mp3"
-  },
+    title: "Tears in Rain",
+    src: "https://slspstudios-sudo.github.io/G-Release-Track/Tears%20in%20rain.%20100bpm%2C%20Bmin%20(Master).mp3",
+    cover: "https://slspstudios-sudo.github.io/G-Release-Track/Chris%20G%20SLS%20-%20Tears%20in%20Rain.jpg"
+     },
   {
     title: "TEST JS 2",
     artist: "Artist B",
@@ -93,4 +92,5 @@ function updateFullPlaylist() {
 }
 
 expandBtn.addEventListener("click", ()=>{ expandArea.style.maxHeight=(expandArea.style.maxHeight && expandArea.style.maxHeight!="0px")?"0":"300px"; });
+
 
