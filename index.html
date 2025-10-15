@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SLSP Studios Player</title>
+  <title>SLSP Player</title>
   <style>
     body {
       margin: 0;
@@ -23,7 +23,6 @@
 
     header img {
       width: 260px;
-      height: auto;
       border-radius: 10px;
     }
 
@@ -36,140 +35,32 @@
       width: 90%;
       max-width: 1200px;
       padding: 20px;
-      background: rgba(20, 20, 20, 0.8);
+      background: rgba(20,20,20,0.8);
       border-radius: 20px;
       box-shadow: 0 0 25px rgba(0,0,0,0.6);
     }
 
-    /* Left - Top 3 */
-    .top3 {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+    .top3 h3 { color: #00bcd4; margin-bottom: 10px; }
+    .top3 div { background:#111; padding:8px 12px; border-radius:10px; margin-bottom:5px; cursor:pointer; transition:.2s;}
+    .top3 div:hover { background:#00bcd4; color:#000;}
 
-    .top3 h3 {
-      margin: 0 0 10px;
-      color: #00bcd4;
-    }
+    .player { display:flex; flex-direction:column; align-items:center; gap:10px;}
+    .buttons { display:flex; gap:15px; margin-top:10px;}
+    button { background:none; border:none; color:#fff; font-size:24px; cursor:pointer; transition:.2s;}
+    button:hover { color:#00bcd4; transform:scale(1.15);}
+    #seek { width:100%; max-width:320px; margin:10px 0; accent-color:#00bcd4;}
+    .volume { display:flex; align-items:center; gap:8px;}
+    .volume input { width:100px; accent-color:#00bcd4;}
 
-    .top3 div {
-      background: #111;
-      padding: 8px 12px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
+    .right { display:flex; flex-direction:column; align-items:center; gap:15px;}
+    .cover img { width:200px; height:200px; border-radius:15px; object-fit:cover; box-shadow:0 0 20px rgba(0,0,0,0.5);}
+    #togglePlaylist { background:#00bcd4; border:none; color:#fff; font-size:14px; padding:8px 15px; border-radius:10px; cursor:pointer; transition:.2s;}
+    #togglePlaylist:hover { background:#0099aa;}
 
-    .top3 div:hover {
-      background: #00bcd4;
-      color: #000;
-    }
-
-    /* Center - Player */
-    .player {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 10px;
-    }
-
-    .buttons {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 10px;
-    }
-
-    button {
-      background: none;
-      border: none;
-      color: #fff;
-      font-size: 24px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    button:hover {
-      color: #00bcd4;
-      transform: scale(1.15);
-    }
-
-    #seek {
-      width: 100%;
-      max-width: 320px;
-      margin: 10px 0;
-      accent-color: #00bcd4;
-    }
-
-    .volume {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .volume input {
-      width: 100px;
-      accent-color: #00bcd4;
-    }
-
-    /* Right - Cover + Playlist */
-    .right {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
-    }
-
-    .cover img {
-      width: 200px;
-      height: 200px;
-      border-radius: 15px;
-      object-fit: cover;
-      box-shadow: 0 0 20px rgba(0,0,0,0.5);
-    }
-
-    #togglePlaylist {
-      background: #00bcd4;
-      border: none;
-      color: #fff;
-      font-size: 14px;
-      padding: 8px 15px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    #togglePlaylist:hover {
-      background: #0099aa;
-    }
-
-    /* Playlist popup */
-    .playlist-container {
-      display: none;
-      margin-top: 20px;
-      background: #111;
-      padding: 15px;
-      border-radius: 15px;
-      width: 80%;
-      max-width: 800px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.6);
-    }
-
-    .playlist-container.active {
-      display: block;
-    }
-
-    .playlist-item {
-      padding: 6px 0;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .playlist-item:hover {
-      color: #00bcd4;
-    }
+    .playlist-container { display:none; margin-top:20px; background:#111; padding:15px; border-radius:15px; width:80%; max-width:800px; box-shadow:0 0 10px rgba(0,0,0,0.6);}
+    .playlist-container.active { display:block;}
+    .playlist-item { padding:6px 0; cursor:pointer; transition:.2s;}
+    .playlist-item:hover { color:#00bcd4;}
   </style>
 </head>
 <body>
@@ -178,15 +69,13 @@
   </header>
 
   <div class="layout">
-    <!-- LEFT -->
+    <!-- LEFT: Top 3 -->
     <div class="top3">
       <h3>Top 3 Songs</h3>
-      <div onclick="playTop3(0)">1️⃣ Tears in Rain</div>
-      <div onclick="playTop3(1)">2️⃣ Dummy Song 1</div>
-      <div onclick="playTop3(2)">3️⃣ Dummy Song 2</div>
+      <div id="top3-container"></div>
     </div>
 
-    <!-- CENTER -->
+    <!-- CENTER: Player -->
     <div class="player">
       <h3 id="track-title">No song loaded</h3>
       <div class="buttons">
@@ -203,7 +92,7 @@
       </div>
     </div>
 
-    <!-- RIGHT -->
+    <!-- RIGHT: Cover + Playlist -->
     <div class="right">
       <div class="cover">
         <img id="cover" src="https://slspstudios-sudo.github.io/G-Release-Track/dummyemptyphoto.jpg" alt="Cover" />
@@ -215,7 +104,7 @@
   <div id="playlist" class="playlist-container"></div>
   <audio id="audio"></audio>
 
-  <!-- 🔗 Eksterni JS fajlovi -->
+  <!-- EXTERNAL JS -->
   <script src="https://slspstudios-sudo.github.io/G-Release-Playlist-Track/top3song.js"></script>
   <script src="https://slspstudios-sudo.github.io/G-Release-Playlist-Track/playlistsong.js"></script>
   <script src="https://slspstudios-sudo.github.io/G-Release-Playlist-Track/g-player.js"></script>
