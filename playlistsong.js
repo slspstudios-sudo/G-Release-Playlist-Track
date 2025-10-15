@@ -14,7 +14,7 @@ const playlist = [
     cover: "https://slspstudios-sudo.github.io/G-Release-Track/Chris%20G%20SLS%20-%20Tears%20in%20Rain.jpg"
   },
   {
-    title: "Dummy Song 1",
+    title: "Dummy Song 434321",
     artist: "Artist 1",
     year: "2024",
     mix: "Demo Mix",
@@ -193,3 +193,4 @@ audio.onended = () => {
     }
   }
 };
+
