@@ -1,113 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SLSP Player</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: "Poppins", sans-serif;
-      background: radial-gradient(circle at center, #0a0a0a, #000);
-      color: #fff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-height: 100vh;
-    }
-
-    header {
-      text-align: center;
-      padding: 20px;
-    }
-
-    header img {
-      width: 260px;
-      border-radius: 10px;
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: 1fr 2fr 1fr;
-      gap: 25px;
-      align-items: start;
-      justify-content: center;
-      width: 90%;
-      max-width: 1200px;
-      padding: 20px;
-      background: rgba(20,20,20,0.8);
-      border-radius: 20px;
-      box-shadow: 0 0 25px rgba(0,0,0,0.6);
-    }
-
-    .top3 h3 { color: #00bcd4; margin-bottom: 10px; }
-    .top3 div { background:#111; padding:8px 12px; border-radius:10px; margin-bottom:5px; cursor:pointer; transition:.2s;}
-    .top3 div:hover { background:#00bcd4; color:#000;}
-
-    .player { display:flex; flex-direction:column; align-items:center; gap:10px;}
-    .buttons { display:flex; gap:15px; margin-top:10px;}
-    button { background:none; border:none; color:#fff; font-size:24px; cursor:pointer; transition:.2s;}
-    button:hover { color:#00bcd4; transform:scale(1.15);}
-    #seek { width:100%; max-width:320px; margin:10px 0; accent-color:#00bcd4;}
-    .volume { display:flex; align-items:center; gap:8px;}
-    .volume input { width:100px; accent-color:#00bcd4;}
-
-    .right { display:flex; flex-direction:column; align-items:center; gap:15px;}
-    .cover img { width:200px; height:200px; border-radius:15px; object-fit:cover; box-shadow:0 0 20px rgba(0,0,0,0.5);}
-    #togglePlaylist { background:#00bcd4; border:none; color:#fff; font-size:14px; padding:8px 15px; border-radius:10px; cursor:pointer; transition:.2s;}
-    #togglePlaylist:hover { background:#0099aa;}
-
-    .playlist-container { display:none; margin-top:20px; background:#111; padding:15px; border-radius:15px; width:80%; max-width:800px; box-shadow:0 0 10px rgba(0,0,0,0.6);}
-    .playlist-container.active { display:block;}
-    .playlist-item { padding:6px 0; cursor:pointer; transition:.2s;}
-    .playlist-item:hover { color:#00bcd4;}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Sites Music Player</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<style>
+body { font-family: Arial; margin:0; padding:0; background:#f5f5f5; }
+.player-container { max-width: 1000px; margin: 20px auto; background:#fff; border-radius:15px; box-shadow:0 4px 12px rgba(0,0,0,0.15); padding:15px; display:flex; gap:15px; }
+.top3 { width:25%; }
+.top3 h3 { margin-top:0; }
+.top3 ul { list-style:none; padding:0; }
+.top3 li { padding:8px; cursor:pointer; border-radius:5px; }
+.top3 li:hover { background:#eee; }
+.central-player { width:50%; text-align:center; }
+.central-player .logo { font-size:2em; font-weight:bold; margin-bottom:15px; }
+.central-player .controls { display:flex; justify-content:center; flex-wrap:wrap; gap:8px; margin-bottom:10px; }
+.central-player button { background:#222; color:#fff; border:none; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; }
+.central-player button:hover { background:#555; }
+.central-player button i { font-size:1.2em; }
+.seek-bar { width:100%; margin-bottom:10px; }
+.volume-bar { width:100%; margin-bottom:15px; }
+.repeat-number { position:absolute; top:2px; right:2px; font-size:0.7em; font-weight:bold; color:#fff; }
+.right-side { width:25%; text-align:center; }
+.right-side img { width:100%; border-radius:10px; margin-bottom:10px; }
+.expand-area { max-height:0; overflow-y:auto; transition:max-height 0.3s ease; background:#fff; border-top:1px solid #ddd; max-width:1000px; margin:0 auto; }
+.expand-area ul { list-style:none; padding:10px; margin:0; }
+.expand-area li { padding:8px; cursor:pointer; border-radius:5px; }
+.expand-area li:hover { background:#eee; }
+</style>
 </head>
 <body>
-  <header>
-    <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.5EjCxhge5FfAEAVHhfLmAwHaHa%3Fcb%3D12%26pid%3DApi&f=1&ipt=9b1920fcb3ec669844515783755c792f8f1e442ae5effcc34bb6b502fe0db5ae&ipo=images" alt="SLSP Studios Logo" />
-  </header>
 
-  <div class="layout">
-    <!-- LEFT: Top 3 -->
-    <div class="top3">
-      <h3>Top 3 Songs</h3>
-      <div id="top3-container"></div>
-    </div>
-
-    <!-- CENTER: Player -->
-    <div class="player">
-      <h3 id="track-title">No song loaded</h3>
-      <div class="buttons">
-        <button id="prev">⏮️</button>
-        <button id="play">▶️</button>
-        <button id="stop">⏹️</button>
-        <button id="next">⏭️</button>
-        <button id="repeat">🔁</button>
-        <button id="shuffle">🔀</button>
-      </div>
-      <input id="seek" type="range" min="0" max="100" value="0" />
-      <div class="volume">
-        🔊 <input id="volume" type="range" min="0" max="1" step="0.01" value="1" />
-      </div>
-    </div>
-
-    <!-- RIGHT: Cover + Playlist -->
-    <div class="right">
-      <div class="cover">
-        <img id="cover" src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.5EjCxhge5FfAEAVHhfLmAwHaHa%3Fcb%3D12%26pid%3DApi&f=1&ipt=9b1920fcb3ec669844515783755c792f8f1e442ae5effcc34bb6b502fe0db5ae&ipo=images" alt="Cover" />
-      </div>
-      <button id="togglePlaylist">Show Playlist ▼</button>
-    </div>
+<div class="player-container">
+  <!-- Top 3 -->
+  <div class="top3">
+    <h3>Top 3 Pjesme</h3>
+    <ul id="top3-list"></ul>
   </div>
 
-  <div id="playlist" class="playlist-container"></div>
-  <audio id="audio"></audio>
+  <!-- Central Player -->
+  <div class="central-player">
+    <div class="logo">MY LOGO</div>
+    <div class="controls">
+      <button id="prev"><i class="fas fa-backward"></i></button>
+      <button id="play-pause"><i class="fas fa-play"></i></button>
+      <button id="stop"><i class="fas fa-stop"></i></button>
+      <button id="next"><i class="fas fa-forward"></i></button>
+      <button id="repeat"><i class="fas fa-redo"></i><span class="repeat-number"></span></button>
+      <button id="shuffle"><i class="fas fa-random"></i> Off</button>
+    </div>
+    <input type="range" id="seek" class="seek-bar" min="0" max="100" value="0">
+    <input type="range" id="volume" class="volume-bar" min="0" max="1" step="0.01" value="1">
+  </div>
 
-  <!-- EXTERNAL JS -->
-  <script src="https://slspstudios-sudo.github.io/G-Release-Playlist-Track/top3song.js"></script>
-  <script src="https://slspstudios-sudo.github.io/G-Release-Playlist-Track/playlistsong.js"></script>
-  <script src="https://slspstudios-sudo.github.io/G-Release-Playlist-Track/g-player.js"></script>
+  <!-- Cover -->
+  <div class="right-side">
+    <img id="cover-img" src="https://slspstudios-sudo.github.io/G-Release-Track/Chris%20G%20SLS%20-%20Tears%20in%20Rain.jpg" alt="Cover">
+    <button id="expand-btn">▼ Show Playlist</button>
+  </div>
+</div>
+
+<!-- Expandable playlist -->
+<div class="expand-area" id="expand-area">
+  <ul id="full-playlist"></ul>
+</div>
+
+<!-- Audio element -->
+<audio id="audio-player" src=""></audio>
+
+<!-- Eksterni JS fajlovi -->
+<script src="https://slspstudios-sudo.github.io/G-Release-Playlist-Track/top3song.js"></script>
+<script src="https://slspstudios-sudo.github.io/G-Release-Playlist-Track/playlistsong.js"></script>
+<script src="https://slspstudios-sudo.github.io/G-Release-Playlist-Track/g-player.js"></script>
+
 </body>
 </html>
-
