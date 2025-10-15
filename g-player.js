@@ -1,64 +1,77 @@
-public void initUI() {
+// Simple Audio Player Shell
+const audio = document.getElementById("audio");
+const playBtn = document.getElementById("play");
+const prevBtn = document.getElementById("prev");
+const nextBtn = document.getElementById("next");
+const seek = document.getElementById("seek");
+const volume = document.getElementById("volume");
+const title = document.getElementById("track-title");
+const cover = document.getElementById("cover");
 
-        //Setting songName Label to center
-        songName = new JLabel("", SwingConstants.CENTER);
+const playlist = [
+  {
+    title: "Tears in Rain",
+    src: "https://slspstudios-sudo.github.io/G-Release-Track/Tears%20in%20rain.%20100bpm%2C%20Bmin%20(Master).mp3",
+    cover: "https://slspstudios-sudo.github.io/G-Release-Track/Chris%20G%20SLS%20-%20Tears%20in%20Rain.jpg"
+  },
+  {
+    title: "Dummy Song 1",
+    src: "https://slspstudios-sudo.github.io/G-Release-Track/dummy1.mp3",
+    cover: "https://slspstudios-sudo.github.io/G-Release-Track/dummyemptyphoto.jpg"
+  },
+  {
+    title: "Dummy Song 2",
+    src: "https://slspstudios-sudo.github.io/G-Release-Track/dummy2.mp3",
+    cover: "https://slspstudios-sudo.github.io/G-Release-Track/dummyemptyphoto.jpg"
+  }
+];
 
-        //Creating button for selecting a song
-        select = new JButton("Select Mp3");
+let current = 0;
+audio.src = playlist[current].src;
+cover.src = playlist[current].cover;
+title.textContent = playlist[current].title;
 
-        //Creating Panels
-        playerPanel = new JPanel(); //Music Selection Panel
-        controlPanel = new JPanel(); //Control Selection Panel
+// Play / Pause
+playBtn.addEventListener("click", () => {
+  if (audio.paused) {
+    audio.play();
+    playBtn.textContent = "⏸";
+  } else {
+    audio.pause();
+    playBtn.textContent = "▶️";
+  }
+});
 
-        //Creating icons for buttons
-        iconPlay = new ImageIcon("C:\\Users\\DataFlair\\Downloads\\play-button.png");
-        iconPause = new ImageIcon("C:\\Users\\DataFlair\\Downloads\\pause-button.png");
-        iconResume = new ImageIcon("C:\\Users\\DataFlair\\Downloads\\resume-button.png");
-        iconStop = new ImageIcon("C:\\Users\\DataFlair\\Downloads\\stop-button.png");
+// Next / Prev
+nextBtn.addEventListener("click", () => nextTrack());
+prevBtn.addEventListener("click", () => prevTrack());
 
-        //Creating image buttons
-        play = new JButton(iconPlay);
-        pause = new JButton(iconPause);
-        resume = new JButton(iconResume);
-        stop = new JButton(iconStop);
-
-        //Setting Layout of PlayerPanel
-        playerPanel.setLayout(new GridLayout(2, 1));
-
-        //Addings components in PlayerPanel
-        playerPanel.add(select);
-        playerPanel.add(songName);
-
-        //Setting Layout of ControlPanel
-        controlPanel.setLayout(new GridLayout(1, 4));
-
-        //Addings components in ControlPanel
-        controlPanel.add(play);
-        controlPanel.add(pause);
-        controlPanel.add(resume);
-        controlPanel.add(stop);
-
-        //Setting buttons background color
-        play.setBackground(Color.WHITE);
-        pause.setBackground(Color.WHITE);
-        resume.setBackground(Color.WHITE);
-        stop.setBackground(Color.WHITE);
-
-        //Initialing the frame
-        frame = new JFrame();
-
-        //Setting Frame's Title
-        frame.setTitle("DataFlair's Music Player");
-
-        //Adding panels in Frame
-        frame.add(playerPanel, BorderLayout.NORTH);
-        frame.add(controlPanel, BorderLayout.SOUTH);
-
-        //Setting Frame background color
-        frame.setBackground(Color.white);
-        frame.setSize(400, 200);
-        frame.setVisible(true);
-        frame.setResizable(false);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+function nextTrack() {
+  current = (current + 1) % playlist.length;
+  loadTrack();
 }
+function prevTrack() {
+  current = (current - 1 + playlist.length) % playlist.length;
+  loadTrack();
+}
+
+function loadTrack() {
+  audio.src = playlist[current].src;
+  cover.src = playlist[current].cover;
+  title.textContent = playlist[current].title;
+  audio.play();
+  playBtn.textContent = "⏸";
+}
+
+// Volume
+volume.addEventListener("input", () => {
+  audio.volume = volume.value;
+});
+
+// Seek
+audio.addEventListener("timeupdate", () => {
+  seek.value = audio.currentTime / audio.duration || 0;
+});
+seek.addEventListener("input", () => {
+  audio.currentTime = audio.duration * seek.value;
+});
