@@ -7,7 +7,7 @@ const playlist = [
     src: "https://via.placeholder.com/3.mp3"
   },
   {
-    title: "Dummy Playlist Song 2",
+    title: "TEST JS 2",
     artist: "Artist B",
     cover: "https://via.placeholder.com/200x200?text=Cover2",
     src: "https://via.placeholder.com/4.mp3"
@@ -93,3 +93,4 @@ function updateFullPlaylist() {
 }
 
 expandBtn.addEventListener("click", ()=>{ expandArea.style.maxHeight=(expandArea.style.maxHeight && expandArea.style.maxHeight!="0px")?"0":"300px"; });
+
