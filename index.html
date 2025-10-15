@@ -100,7 +100,13 @@
       accent-color: #00bcd4;
     }
 
-    /* RIGHT: Cover */
+    /* RIGHT: Cover + Playlist */
+    .right-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
     .cover img {
       width: 200px;
       height: 200px;
@@ -109,7 +115,22 @@
       box-shadow: 0 0 15px rgba(0,0,0,0.5);
     }
 
-    /* Playlist toggle */
+    #togglePlaylist {
+      margin-top: 15px;
+      background: #00bcd4;
+      border: none;
+      color: #fff;
+      font-size: 14px;
+      padding: 8px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      align-self: flex-end;
+    }
+    #togglePlaylist:hover {
+      background: #0099aa;
+    }
+
+    /* Playlist container */
     .playlist-container {
       display: none;
       margin-top: 20px;
@@ -136,20 +157,6 @@
 
     .playlist-item:hover {
       color: #00bcd4;
-    }
-
-    #togglePlaylist {
-      margin-top: 20px;
-      background: #00bcd4;
-      border: none;
-      color: #fff;
-      font-size: 14px;
-      padding: 8px 15px;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    #togglePlaylist:hover {
-      background: #0099aa;
     }
   </style>
 </head>
@@ -184,16 +191,18 @@
       </div>
     </div>
 
-    <!-- RIGHT: Cover -->
-    <div class="cover">
-      <img id="cover" src="https://slspstudios-sudo.github.io/G-Release-Track/Chris%20G%20SLS%20-%20Tears%20in%20Rain.jpg" alt="Cover">
+    <!-- RIGHT: Cover + Playlist button -->
+    <div class="right-panel">
+      <div class="cover">
+        <img id="cover" src="https://slspstudios-sudo.github.io/G-Release-Track/Chris%20G%20SLS%20-%20Tears%20in%20Rain.jpg" alt="Cover">
+      </div>
+      <button id="togglePlaylist">Show Playlist ▼</button>
     </div>
   </div>
 
-  <button id="togglePlaylist">Show Playlist ▼</button>
   <div id="playlist" class="playlist-container"></div>
-
   <audio id="audio"></audio>
+
   <script src="g-player.js"></script>
 </body>
 </html>
