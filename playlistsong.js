@@ -5,7 +5,7 @@ const playlist = [
     artist: "Chris G SLS",
     year: "2025",
     mix: "Master 100bpm",
-    duration: "3:45", // novi stupac
+    duration: "3:45",
     file: "https://slspstudios-sudo.github.io/G-Release-Track/Tears%20in%20rain.%20100bpm%2C%20Bmin%20(Master).mp3",
     cover: "https://slspstudios-sudo.github.io/G-Release-Track/Chris%20G%20SLS%20-%20Tears%20in%20Rain.jpg"
   },
@@ -31,10 +31,18 @@ const playlist = [
 
 // Popunjavanje full playlist
 const fullPlaylistContainer = document.getElementById("full-playlist");
-
 playlist.forEach((song, i) => {
   const li = document.createElement("li");
   li.innerHTML = `<strong>${song.title}</strong> | ${song.artist} | ${song.year} | ${song.mix} | ${song.duration}`;
   li.onclick = () => playSong(i);
   fullPlaylistContainer.appendChild(li);
+});
+
+// Popunjavanje Top 3 liste
+const top3Container = document.getElementById("top3-list");
+playlist.slice(0, 3).forEach((song, i) => {
+  const li = document.createElement("li");
+  li.textContent = song.title; // samo ime pjesme
+  li.onclick = () => playSong(i); // koristi istu funkciju iz g-player.js
+  top3Container.appendChild(li);
 });
