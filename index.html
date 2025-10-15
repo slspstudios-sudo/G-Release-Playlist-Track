@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SLSP Player</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0a0a0a;
+      color: white;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+    #player-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      max-width: 400px;
+      margin: auto;
+      background: #111;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.1);
+    }
+    img#cover {
+      width: 100%;
+      border-radius: 10px;
+    }
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      align-items: center;
+    }
+    button {
+      background: none;
+      border: 1px solid #555;
+      color: white;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    input[type="range"] {
+      width: 80%;
+    }
+  </style>
+</head>
+<body>
+  <h2>🎧 SLSP Player</h2>
+  <div id="player-container">
+    <img id="cover" src="https://slspstudios-sudo.github.io/G-Release-Track/Chris%20G%20SLS%20-%20Tears%20in%20Rain.jpg" alt="Cover">
+    <p id="track-title">Tears in Rain</p>
+    <audio id="audio"></audio>
+    <div class="controls">
+      <button id="prev">⏮</button>
+      <button id="play">▶️</button>
+      <button id="next">⏭</button>
+    </div>
+    <input type="range" id="seek" value="0">
+    <input type="range" id="volume" min="0" max="1" step="0.01" value="1">
+  </div>
+
+  <script src="g-player.js"></script>
+</body>
+</html>
