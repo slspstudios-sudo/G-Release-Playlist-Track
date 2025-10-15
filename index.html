@@ -19,7 +19,8 @@ body { font-family: Arial; margin:0; padding:0; background:#f5f5f5; }
 .central-player button { background:#222; color:#fff; border:none; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; cursor:pointer; position:relative; }
 .central-player button:hover { background:#555; }
 .central-player button i { font-size:1.2em; }
-.seek-bar { width:100%; margin-bottom:10px; }
+.seek-bar { width:100%; margin-bottom:5px; }
+.time-display { font-size:0.9em; margin-bottom:10px; }
 .volume-bar { width:100%; margin-bottom:15px; }
 .repeat-number { position:absolute; top:2px; right:2px; font-size:0.7em; font-weight:bold; color:#fff; }
 .right-side { width:25%; text-align:center; }
@@ -51,6 +52,9 @@ body { font-family: Arial; margin:0; padding:0; background:#f5f5f5; }
       <button id="shuffle"><i class="fas fa-random"></i> Off</button>
     </div>
     <input type="range" id="seek" class="seek-bar" min="0" max="100" value="0">
+    <div class="time-display">
+      <span id="current-time">0:00</span> / <span id="duration">0:00</span>
+    </div>
     <input type="range" id="volume" class="volume-bar" min="0" max="1" step="0.01" value="1">
   </div>
 
@@ -73,6 +77,23 @@ body { font-family: Arial; margin:0; padding:0; background:#f5f5f5; }
 <script src="https://slspstudios-sudo.github.io/G-Release-Playlist-Track/top3song.js"></script>
 <script src="https://slspstudios-sudo.github.io/G-Release-Playlist-Track/playlistsong.js"></script>
 <script src="https://slspstudios-sudo.github.io/G-Release-Playlist-Track/g-player.js"></script>
+
+<script>
+// prikaz vremena
+const audio = document.getElementById("audio-player");
+const currentTimeEl = document.getElementById("current-time");
+const durationEl = document.getElementById("duration");
+
+audio.ontimeupdate = () => {
+  if(audio.duration){
+    const current = Math.floor(audio.currentTime);
+    const dur = Math.floor(audio.duration);
+    const formatTime = t => `${Math.floor(t/60)}:${(t%60).toString().padStart(2,'0')}`;
+    currentTimeEl.textContent = formatTime(current);
+    durationEl.textContent = formatTime(dur);
+  }
+};
+</script>
 
 </body>
 </html>
