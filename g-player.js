@@ -1,139 +1,125 @@
-const audio = document.getElementById("audio");
-const playBtn = document.getElementById("play");
-const prevBtn = document.getElementById("prev");
+const audio = document.getElementById("audio-player");
+const playBtn = document.getElementById("play-pause");
+const stopBtn = document.getElementById("stop");
 const nextBtn = document.getElementById("next");
+const prevBtn = document.getElementById("prev");
 const repeatBtn = document.getElementById("repeat");
 const shuffleBtn = document.getElementById("shuffle");
-const seek = document.getElementById("seek");
-const volume = document.getElementById("volume");
-const title = document.getElementById("track-title");
-const cover = document.getElementById("cover");
-const playlistContainer = document.getElementById("playlist");
-const togglePlaylistBtn = document.getElementById("togglePlaylist");
+const seekBar = document.getElementById("seek");
+const volumeBar = document.getElementById("volume");
+const coverImg = document.getElementById("cover-img");
+const trackTitle = document.getElementById("track-title");
+const expandBtn = document.getElementById("expand-btn");
+const expandArea = document.getElementById("expand-area");
 
-let playlist = [
-  {
-    title: "Tears in Rain",
-    src: "https://slspstudios-sudo.github.io/G-Release-Track/Tears%20in%20rain.%20100bpm%2C%20Bmin%20(Master).mp3",
-    cover: "https://slspstudios-sudo.github.io/G-Release-Track/Chris%20G%20SLS%20-%20Tears%20in%20Rain.jpg"
-  },
-  {
-    title: "Dummy Song 1",
-    src: "https://slspstudios-sudo.github.io/G-Release-Track/dummy1.mp3",
-    cover: "https://slspstudios-sudo.github.io/G-Release-Track/dummyemptyphoto.jpg"
-  },
-  {
-    title: "Dummy Song 2",
-    src: "https://slspstudios-sudo.github.io/G-Release-Track/dummy2.mp3",
-    cover: "https://slspstudios-sudo.github.io/G-Release-Track/dummyemptyphoto.jpg"
-  }
-];
+let currentIndex = 0;
+let isPlaying = false;
+let repeatMode = 0; // 0=off, 1=once, 2=all
+let shuffleMode = false;
 
-let current = 0;
-let repeatMode = "off";
-let isShuffle = false;
-
-function loadTrack() {
-  const track = playlist[current];
-  audio.src = track.src;
-  cover.src = track.cover;
-  title.textContent = track.title;
+// Play odabranu pjesmu
+function playSong(index) {
+  currentIndex = index;
+  const song = playlist[currentIndex];
+  audio.src = song.file;
+  trackTitle.textContent = `${song.title} - ${song.artist}`;
+  coverImg.src = song.cover;
+  audio.play();
+  isPlaying = true;
+  playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+  // automatski show playlist dolje
+  expandArea.style.maxHeight = "300px";
 }
-loadTrack();
 
-// Play / Pause
-playBtn.addEventListener("click", () => {
-  if (audio.paused) {
-    audio.play();
-    playBtn.textContent = "⏸";
-  } else {
-    audio.pause();
-    playBtn.textContent = "▶️";
+// Toggle Play / Pause
+playBtn.onclick = () => {
+  if (!audio.src) {
+    playSong(currentIndex);
+    return;
   }
-});
+  if (isPlaying) {
+    audio.pause();
+    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+  } else {
+    audio.play();
+    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+  }
+  isPlaying = !isPlaying;
+};
+
+// Stop
+stopBtn.onclick = () => {
+  audio.pause();
+  audio.currentTime = 0;
+  isPlaying = false;
+  playBtn.innerHTML = '<i class="fas fa-play"></i>';
+};
 
 // Next / Prev
-function nextTrack() {
-  current = isShuffle ? Math.floor(Math.random() * playlist.length) : (current + 1) % playlist.length;
-  loadTrack();
-  audio.play();
-  playBtn.textContent = "⏸";
-}
-function prevTrack() {
-  current = (current - 1 + playlist.length) % playlist.length;
-  loadTrack();
-  audio.play();
-  playBtn.textContent = "⏸";
-}
-nextBtn.addEventListener("click", nextTrack);
-prevBtn.addEventListener("click", prevTrack);
-
-// Repeat
-repeatBtn.addEventListener("click", () => {
-  if (repeatMode === "off") {
-    repeatMode = "one";
-    repeatBtn.textContent = "🔂1";
-  } else if (repeatMode === "one") {
-    repeatMode = "all";
-    repeatBtn.textContent = "🔁";
+nextBtn.onclick = () => {
+  if (shuffleMode) {
+    currentIndex = Math.floor(Math.random() * playlist.length);
   } else {
-    repeatMode = "off";
-    repeatBtn.textContent = "🔁";
-    repeatBtn.style.opacity = 0.5;
+    currentIndex++;
+    if (currentIndex >= playlist.length) currentIndex = 0;
   }
-});
+  playSong(currentIndex);
+};
 
-// Shuffle
-shuffleBtn.addEventListener("click", () => {
-  isShuffle = !isShuffle;
-  shuffleBtn.style.color = isShuffle ? "#00bcd4" : "#fff";
-});
+prevBtn.onclick = () => {
+  currentIndex--;
+  if (currentIndex < 0) currentIndex = playlist.length -1;
+  playSong(currentIndex);
+};
 
-// When track ends
-audio.addEventListener("ended", () => {
-  if (repeatMode === "one") {
-    audio.currentTime = 0;
-    audio.play();
-  } else if (repeatMode === "all") {
-    nextTrack();
-  } else {
-    playBtn.textContent = "▶️";
+// Repeat toggle
+repeatBtn.onclick = () => {
+  repeatMode = (repeatMode +1) % 3;
+  const num = repeatBtn.querySelector(".repeat-number");
+  if(repeatMode===0){ num.textContent=""; }
+  else if(repeatMode===1){ num.textContent="1"; }
+  else { num.textContent="A"; }
+};
+
+// Shuffle toggle
+shuffleBtn.onclick = () => {
+  shuffleMode = !shuffleMode;
+  shuffleBtn.innerHTML = shuffleMode ? '<i class="fas fa-random"></i> On' : '<i class="fas fa-random"></i> Off';
+};
+
+// Seek bar
+audio.ontimeupdate = () => {
+  if(audio.duration){
+    seekBar.value = (audio.currentTime/audio.duration)*100;
   }
-});
+};
+
+seekBar.oninput = () => {
+  if(audio.duration){
+    audio.currentTime = (seekBar.value/100)*audio.duration;
+  }
+};
 
 // Volume
-volume.addEventListener("input", () => {
-  audio.volume = volume.value;
-});
+volumeBar.oninput = () => {
+  audio.volume = volumeBar.value;
+};
 
-// Seek
-audio.addEventListener("timeupdate", () => {
-  seek.value = audio.currentTime / audio.duration || 0;
-});
-seek.addEventListener("input", () => {
-  audio.currentTime = audio.duration * seek.value;
-});
+// Expand / Collapse playlist
+expandBtn.onclick = () => {
+  if(expandArea.style.maxHeight && expandArea.style.maxHeight!=="0px"){
+    expandArea.style.maxHeight="0";
+  } else {
+    expandArea.style.maxHeight="300px";
+  }
+};
 
-// Playlist toggle
-togglePlaylistBtn.addEventListener("click", () => {
-  playlistContainer.classList.toggle("active");
-  togglePlaylistBtn.textContent = playlistContainer.classList.contains("active") ? "Hide Playlist ▲" : "Show Playlist ▼";
-});
-
-// Generate playlist
-function renderPlaylist() {
-  playlistContainer.innerHTML = "";
-  playlist.forEach((track, index) => {
-    const item = document.createElement("div");
-    item.classList.add("playlist-item");
-    item.innerHTML = `<span>${index + 1}. ${track.title}</span>`;
-    item.addEventListener("click", () => {
-      current = index;
-      loadTrack();
-      audio.play();
-      playBtn.textContent = "⏸";
-    });
-    playlistContainer.appendChild(item);
-  });
-}
-renderPlaylist();
+// Auto play next song when ended
+audio.onended = () => {
+  if(repeatMode===1){
+    playSong(currentIndex);
+  } else {
+    nextBtn.onclick();
+    if(repeatMode===0 && currentIndex===0){ audio.pause(); isPlaying=false; playBtn.innerHTML='<i class="fas fa-play"></i>'; }
+  }
+};
