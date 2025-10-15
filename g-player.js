@@ -1,14 +1,17 @@
-// Simple Audio Player Shell
 const audio = document.getElementById("audio");
 const playBtn = document.getElementById("play");
 const prevBtn = document.getElementById("prev");
 const nextBtn = document.getElementById("next");
+const repeatBtn = document.getElementById("repeat");
+const shuffleBtn = document.getElementById("shuffle");
 const seek = document.getElementById("seek");
 const volume = document.getElementById("volume");
 const title = document.getElementById("track-title");
 const cover = document.getElementById("cover");
+const playlistContainer = document.getElementById("playlist");
+const togglePlaylistBtn = document.getElementById("togglePlaylist");
 
-const playlist = [
+let playlist = [
   {
     title: "Tears in Rain",
     src: "https://slspstudios-sudo.github.io/G-Release-Track/Tears%20in%20rain.%20100bpm%2C%20Bmin%20(Master).mp3",
@@ -27,9 +30,16 @@ const playlist = [
 ];
 
 let current = 0;
-audio.src = playlist[current].src;
-cover.src = playlist[current].cover;
-title.textContent = playlist[current].title;
+let repeatMode = "off";
+let isShuffle = false;
+
+function loadTrack() {
+  const track = playlist[current];
+  audio.src = track.src;
+  cover.src = track.cover;
+  title.textContent = track.title;
+}
+loadTrack();
 
 // Play / Pause
 playBtn.addEventListener("click", () => {
@@ -43,25 +53,53 @@ playBtn.addEventListener("click", () => {
 });
 
 // Next / Prev
-nextBtn.addEventListener("click", () => nextTrack());
-prevBtn.addEventListener("click", () => prevTrack());
-
 function nextTrack() {
-  current = (current + 1) % playlist.length;
+  current = isShuffle ? Math.floor(Math.random() * playlist.length) : (current + 1) % playlist.length;
   loadTrack();
+  audio.play();
+  playBtn.textContent = "⏸";
 }
 function prevTrack() {
   current = (current - 1 + playlist.length) % playlist.length;
   loadTrack();
-}
-
-function loadTrack() {
-  audio.src = playlist[current].src;
-  cover.src = playlist[current].cover;
-  title.textContent = playlist[current].title;
   audio.play();
   playBtn.textContent = "⏸";
 }
+nextBtn.addEventListener("click", nextTrack);
+prevBtn.addEventListener("click", prevTrack);
+
+// Repeat
+repeatBtn.addEventListener("click", () => {
+  if (repeatMode === "off") {
+    repeatMode = "one";
+    repeatBtn.textContent = "🔂1";
+  } else if (repeatMode === "one") {
+    repeatMode = "all";
+    repeatBtn.textContent = "🔁";
+  } else {
+    repeatMode = "off";
+    repeatBtn.textContent = "🔁";
+    repeatBtn.style.opacity = 0.5;
+  }
+});
+
+// Shuffle
+shuffleBtn.addEventListener("click", () => {
+  isShuffle = !isShuffle;
+  shuffleBtn.style.color = isShuffle ? "#00bcd4" : "#fff";
+});
+
+// When track ends
+audio.addEventListener("ended", () => {
+  if (repeatMode === "one") {
+    audio.currentTime = 0;
+    audio.play();
+  } else if (repeatMode === "all") {
+    nextTrack();
+  } else {
+    playBtn.textContent = "▶️";
+  }
+});
 
 // Volume
 volume.addEventListener("input", () => {
@@ -75,3 +113,27 @@ audio.addEventListener("timeupdate", () => {
 seek.addEventListener("input", () => {
   audio.currentTime = audio.duration * seek.value;
 });
+
+// Playlist toggle
+togglePlaylistBtn.addEventListener("click", () => {
+  playlistContainer.classList.toggle("active");
+  togglePlaylistBtn.textContent = playlistContainer.classList.contains("active") ? "Hide Playlist ▲" : "Show Playlist ▼";
+});
+
+// Generate playlist
+function renderPlaylist() {
+  playlistContainer.innerHTML = "";
+  playlist.forEach((track, index) => {
+    const item = document.createElement("div");
+    item.classList.add("playlist-item");
+    item.innerHTML = `<span>${index + 1}. ${track.title}</span>`;
+    item.addEventListener("click", () => {
+      current = index;
+      loadTrack();
+      audio.play();
+      playBtn.textContent = "⏸";
+    });
+    playlistContainer.appendChild(item);
+  });
+}
+renderPlaylist();
