@@ -7,7 +7,7 @@ const top3Songs = [
     src: "https://slspstudios-sudo.github.io/G-Release-Track/Tears%20in%20rain.%20100bpm,%20Bmin%20(Master).mp3"
   },
   {
-    title: "Dummy Song 2",
+    title: "Test JS FIle 2",
     artist: "Artist 2",
     cover: "https://via.placeholder.com/200x200?text=Cover2",
     src: "https://via.placeholder.com/1.mp3"
@@ -47,5 +47,6 @@ function loadSongFromTop3(index) {
 }
 
 loadTop3();
+
 
 
