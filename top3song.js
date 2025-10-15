@@ -1,7 +1,7 @@
 // Top 3 pjesme
 const top3Songs = [
   {
-    title: "Tears in Rain "ext"",
+    title: "Tears in Rain ext",
     artist: "Chris G SLS",
     cover: "https://slspstudios-sudo.github.io/G-Release-Track/Chris%20G%20SLS%20-%20Tears%20in%20Rain.jpg",
     src: "https://slspstudios-sudo.github.io/G-Release-Track/Tears%20in%20rain.%20100bpm,%20Bmin%20(Master).mp3"
@@ -47,4 +47,5 @@ function loadSongFromTop3(index) {
 }
 
 loadTop3();
+
 
