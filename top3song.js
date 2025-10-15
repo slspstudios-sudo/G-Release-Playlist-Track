@@ -1,4 +1,4 @@
-// Top 3 pjesme - primjer sa stvarnim GitHub linkovima
+// Top 3 pjesme
 const top3Songs = [
   {
     title: "Tears in Rain",
@@ -10,17 +10,17 @@ const top3Songs = [
     title: "Dummy Song 2",
     artist: "Artist 2",
     cover: "https://via.placeholder.com/200x200?text=Cover2",
-    src: "https://raw.githubusercontent.com/slspstudios-sudo/G-Release-Track/main/Tears%20in%20rain.%20100bpm,%20Bmin%20(Master).mp3"
+    src: "https://via.placeholder.com/1.mp3"
   },
   {
     title: "Dummy Song 3",
     artist: "Artist 3",
     cover: "https://via.placeholder.com/200x200?text=Cover3",
-    src: "https://raw.githubusercontent.com/slspstudios-sudo/G-Release-Track/main/Tears%20in%20rain.%20100bpm,%20Bmin%20(Master).mp3"
+    src: "https://via.placeholder.com/2.mp3"
   }
 ];
 
-// Funkcija za prikaz Top 3 u HTML listi
+// Top3 lista u HTML
 const top3List = document.getElementById("top3-list");
 
 function loadTop3() {
@@ -29,14 +29,13 @@ function loadTop3() {
     const li = document.createElement("li");
     li.textContent = song.title + " - " + song.artist;
     li.onclick = () => {
-      // Event kada korisnik klikne na top3 pjesmu
       loadSongFromTop3(i);
     };
     top3List.appendChild(li);
   });
 }
 
-// Funkcija za učitavanje pjesme iz Top3
+// Učitavanje pjesme iz Top3
 function loadSongFromTop3(index) {
   const song = top3Songs[index];
   const audio = document.getElementById("audio-player");
@@ -48,5 +47,3 @@ function loadSongFromTop3(index) {
 }
 
 loadTop3();
-
-
