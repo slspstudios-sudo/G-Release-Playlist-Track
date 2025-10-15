@@ -11,10 +11,12 @@ const coverImg = document.getElementById("cover-img");
 const trackTitle = document.getElementById("track-title");
 const expandBtn = document.getElementById("expand-btn");
 const expandArea = document.getElementById("expand-area");
+const currentTimeEl = document.getElementById("current-time");
+const durationEl = document.getElementById("duration");
 
 let currentIndex = 0;
 let isPlaying = false;
-let repeatMode = 0; // 0=off, 1=once, 2=all
+let repeatMode = 0; // 0=off,1=once,2=all
 let shuffleMode = false;
 
 // Play odabranu pjesmu
@@ -27,8 +29,13 @@ function playSong(index) {
   audio.play();
   isPlaying = true;
   playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-  // automatski show playlist dolje
+  // show playlist dolje
   expandArea.style.maxHeight = "300px";
+}
+
+// Top3 klik
+function playTop3(index){
+  playSong(index);
 }
 
 // Toggle Play / Pause
@@ -87,10 +94,16 @@ shuffleBtn.onclick = () => {
   shuffleBtn.innerHTML = shuffleMode ? '<i class="fas fa-random"></i> On' : '<i class="fas fa-random"></i> Off';
 };
 
-// Seek bar
+// Seek bar update
 audio.ontimeupdate = () => {
   if(audio.duration){
     seekBar.value = (audio.currentTime/audio.duration)*100;
+    // update vremena
+    const current = Math.floor(audio.currentTime);
+    const dur = Math.floor(audio.duration);
+    const formatTime = t => `${Math.floor(t/60)}:${(t%60).toString().padStart(2,'0')}`;
+    currentTimeEl.textContent = formatTime(current);
+    durationEl.textContent = formatTime(dur);
   }
 };
 
@@ -120,6 +133,10 @@ audio.onended = () => {
     playSong(currentIndex);
   } else {
     nextBtn.onclick();
-    if(repeatMode===0 && currentIndex===0){ audio.pause(); isPlaying=false; playBtn.innerHTML='<i class="fas fa-play"></i>'; }
+    if(repeatMode===0 && currentIndex===0){ 
+      audio.pause(); 
+      isPlaying=false; 
+      playBtn.innerHTML='<i class="fas fa-play"></i>'; 
+    }
   }
 };
