@@ -1,128 +1,87 @@
-// player.js
-
-const audio = document.getElementById("audio-player");
-const coverImg = document.getElementById("cover-img");
-const playBtn = document.getElementById("play-pause");
-const stopBtn = document.getElementById("stop");
-const nextBtn = document.getElementById("next");
-const prevBtn = document.getElementById("prev");
-const repeatBtn = document.getElementById("repeat");
-const repeatNumber = repeatBtn.querySelector(".repeat-number");
-const shuffleBtn = document.getElementById("shuffle");
-const seekBar = document.getElementById("seek");
-const volumeBar = document.getElementById("volume");
-const expandBtn = document.getElementById("expand-btn");
-const expandArea = document.getElementById("expand-area");
-const top3List = document.getElementById("top3-list");
-const fullPlaylist = document.getElementById("full-playlist");
-
-let currentIndex = -1;
+const defaultCover = "https://slspstudios-sudo.github.io/G-Release-Track/dummyemptyphoto.jpg";
+let currentIndex = 0;
 let isPlaying = false;
-let repeatMode = "off";
+let repeatMode = "off"; // off | one | all
 let shuffle = false;
 
-// ----- Load Top3 -----
-function loadTop3() {
-  top3List.innerHTML = "";
-  top3Songs.forEach((song, i) => {
-    const li = document.createElement("li");
-    li.textContent = song.title + " - " + song.artist;
-    li.onclick = () => loadSongFromTop3(i);
-    top3List.appendChild(li);
-  });
+const audio = new Audio();
+
+function loadSong(song) {
+  document.getElementById("title").textContent = song.title;
+  document.getElementById("artist").textContent = song.artist;
+  const cover = document.getElementById("cover-img");
+  cover.src = song.cover || defaultCover;
+  cover.onerror = () => (cover.src = defaultCover);
+  audio.src = song.src;
 }
 
-function loadSongFromTop3(i) {
-  const song = top3Songs[i];
-  audio.src = song.src;
-  coverImg.src = song.cover;
+function playSong() {
   audio.play();
   isPlaying = true;
-  playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-  currentIndex = i;
+  document.getElementById("play").textContent = "⏸️";
 }
 
-// ----- Playlist -----
-function loadSong(i) {
-  currentIndex = i;
-  const song = playlist[i];
-  audio.src = song.src;
-  coverImg.src = song.cover;
-  updateFullPlaylist();
-  seekBar.value = 0;
-}
-
-function updateFullPlaylist() {
-  fullPlaylist.innerHTML = "";
-  playlist.forEach((song, i) => {
-    const li = document.createElement("li");
-    li.textContent = song.title + " - " + song.artist;
-    li.onclick = () => {
-      loadSong(i);
-      audio.play();
-      isPlaying = true;
-      playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-    };
-    fullPlaylist.appendChild(li);
-  });
-}
-
-// ----- Controls -----
-function playPause() {
-  if (currentIndex === -1) loadSong(0);
-  if (isPlaying) { audio.pause(); playBtn.innerHTML = '<i class="fas fa-play"></i>'; }
-  else { audio.play(); playBtn.innerHTML = '<i class="fas fa-pause"></i>'; }
-  isPlaying = !isPlaying;
-}
-
-function stop() {
-  audio.pause(); audio.currentTime = 0;
-  playBtn.innerHTML = '<i class="fas fa-play"></i>';
-  coverImg.src = "https://slspstudios-sudo.github.io/G-Release-Track/Chris%20G%20SLS%20-%20Tears%20in%20Rain.jpg";
+function pauseSong() {
+  audio.pause();
   isPlaying = false;
-  currentIndex = -1;
+  document.getElementById("play").textContent = "▶️";
+}
+
+function stopSong() {
+  audio.pause();
+  audio.currentTime = 0;
+  isPlaying = false;
+  document.getElementById("play").textContent = "▶️";
 }
 
 function nextSong() {
   if (shuffle) currentIndex = Math.floor(Math.random() * playlist.length);
-  else { currentIndex++; if (currentIndex >= playlist.length) currentIndex = (repeatMode === "all") ? 0 : playlist.length - 1; }
-  loadSong(currentIndex); if (isPlaying) audio.play();
+  else currentIndex = (currentIndex + 1) % playlist.length;
+  loadSong(playlist[currentIndex]);
+  if (isPlaying) playSong();
 }
 
 function prevSong() {
-  currentIndex--; if (currentIndex < 0) currentIndex = 0;
-  loadSong(currentIndex); if (isPlaying) audio.play();
+  currentIndex = (currentIndex - 1 + playlist.length) % playlist.length;
+  loadSong(playlist[currentIndex]);
+  if (isPlaying) playSong();
 }
 
 function toggleRepeat() {
-  repeatMode = (repeatMode === "off") ? "one" : (repeatMode === "one") ? "all" : "off";
-  repeatNumber.textContent = (repeatMode === "one") ? "1" : "";
+  const btn = document.getElementById("repeat");
+  if (repeatMode === "off") {
+    repeatMode = "one";
+    btn.textContent = "🔁1";
+  } else if (repeatMode === "one") {
+    repeatMode = "all";
+    btn.textContent = "🔁∞";
+  } else {
+    repeatMode = "off";
+    btn.textContent = "🔁";
+  }
 }
 
 function toggleShuffle() {
   shuffle = !shuffle;
-  shuffleBtn.innerHTML = '<i class="fas fa-random"></i> ' + (shuffle ? "On" : "Off");
+  document.getElementById("shuffle").style.color = shuffle ? "#0af" : "#fff";
 }
 
-// ----- Seek & Volume -----
-seekBar.addEventListener("input", () => { audio.currentTime = (seekBar.value / 100) * audio.duration; });
-audio.addEventListener("timeupdate", () => {
-  if (audio.duration) seekBar.value = (audio.currentTime / audio.duration) * 100;
-  if (audio.ended) { if (repeatMode === "one") audio.play(); else nextSong(); }
+function setVolume(v) {
+  audio.volume = v;
+}
+
+audio.addEventListener("ended", () => {
+  if (repeatMode === "one") playSong();
+  else if (repeatMode === "all") nextSong();
 });
-volumeBar.addEventListener("input", () => { audio.volume = volumeBar.value; });
 
-// ----- Expand playlist -----
-expandBtn.addEventListener("click", () => { expandArea.style.maxHeight = (expandArea.style.maxHeight && expandArea.style.maxHeight != "0px") ? "0" : "300px"; });
-
-// ----- Event listeners -----
-playBtn.addEventListener("click", playPause);
-stopBtn.addEventListener("click", stop);
-nextBtn.addEventListener("click", nextSong);
-prevBtn.addEventListener("click", prevSong);
-repeatBtn.addEventListener("click", toggleRepeat);
-shuffleBtn.addEventListener("click", toggleShuffle);
-
-// ----- Init -----
-loadTop3();
-updateFullPlaylist();
+window.onload = () => {
+  loadSong(playlist[currentIndex]);
+  document.getElementById("play").onclick = () => (isPlaying ? pauseSong() : playSong());
+  document.getElementById("stop").onclick = stopSong;
+  document.getElementById("next").onclick = nextSong;
+  document.getElementById("prev").onclick = prevSong;
+  document.getElementById("repeat").onclick = toggleRepeat;
+  document.getElementById("shuffle").onclick = toggleShuffle;
+  document.getElementById("volume").oninput = e => setVolume(e.target.value);
+};
