@@ -111,16 +111,13 @@ function playSong(index) {
   audio.src = song.file;
   audio.load(); // prisilno učitavanje
 
-  // Postavi naslov i sliku s efektom fade
-if (trackTitle) trackTitle.textContent = `${song.title} - ${song.artist}`;
-if (coverImg) {
-  coverImg.classList.add("fade-out");
+  // Fade cover FX
+  coverImg.classList.add('fade-out'); // smanji opacity
   setTimeout(() => {
     coverImg.src = song.cover + "?t=" + new Date().getTime(); // osvježi cache
     coverImg.alt = song.title;
-    coverImg.onload = () => coverImg.classList.remove("fade-out");
-  }, 300);
-}
+    coverImg.classList.remove('fade-out'); // fade-in
+  }, 300); // pola trajanja tranzicije
 
   // Pokreni pjesmu automatski
   audio.play().then(() => {
@@ -236,6 +233,7 @@ audio.onended = () => {
     }
   }
 };
+
 
 
 
