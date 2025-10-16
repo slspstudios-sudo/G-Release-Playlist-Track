@@ -5,7 +5,7 @@
 // Playlist definicija
 const playlist = [
   {
-    title: "Tears in Rain raw link",
+    title: "Tears in Rain",
     artist: "Chris G SLS",
     year: "2024",
     mix: "(Original Mix)",
@@ -18,7 +18,7 @@ const playlist = [
     artist: "Chris G SLS",
     year: "2025",
     mix: "(Original Mix)",
-    duration: "2:30",
+    duration: "3:35",
     file: "https://raw.githubusercontent.com/slspstudios-sudo/G-Release-Track/main/Chris%20G%20SLS%20-%20Do%20you%20feel%20it%20(100BPM%2C%20Bmin)_MASTERING.mp3",
     cover: "https://raw.githubusercontent.com/slspstudios-sudo/G-Release-Track/main/Chris%20G%20SLS%20-%20Do%20you%20feel.jpg"
   },
@@ -233,6 +233,7 @@ audio.onended = () => {
     }
   }
 };
+
 
 
 
