@@ -10,8 +10,8 @@ const playlist = [
     year: "2024",
     mix: "(Original Mix)",
     duration: "3:45",
-    file: "https://github.com/slspstudios-sudo/G-Release-Track/blob/main/Tears%20in%20rain.%20100bpm%2C%20Bmin%20(Master).mp3g",
-    cover: "https://github.com/slspstudios-sudo/G-Release-Track/blob/main/Chris%20G%20SLS%20-%20Tears%20in%20Rain.jpg"
+    file: "https://raw.githubusercontent.com/slspstudios-sudo/G-Release-Track/main/Tears%20in%20rain.%20100bpm%2C%20Bmin%20(Master).mp3g",
+    cover: "https://raw.githubusercontent.com/slspstudios-sudo/G-Release-Track/main/Chris%20G%20SLS%20-%20Tears%20in%20Rain.jpg"
   },
   {
     title: "Do You Feel",
@@ -193,6 +193,7 @@ audio.onended = () => {
     }
   }
 };
+
 
 
 
