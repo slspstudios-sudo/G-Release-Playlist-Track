@@ -7,26 +7,26 @@ const playlist = [
   {
     title: "Tears in Rain",
     artist: "Chris G SLS",
-    year: "2025",
-    mix: "Master 100bpm",
+    year: "2024",
+    mix: "(Original Mix)",
     duration: "3:45",
     file: "https://slspstudios-sudo.github.io/G-Release-Track/dummyemptyphoto.jpg",
     cover: "https://slspstudios-sudo.github.io/G-Release-Track/dummyemptyphoto.jpg"
   },
   {
     title: "Do You Feel",
-    artist: "Artist 1",
-    year: "2024",
-    mix: "Demo Mix",
+    artist: "Chris G SLS",
+    year: "2025",
+    mix: "(Original Mix)",
     duration: "2:30",
     file: "https://slspstudios-sudo.github.io/G-Release-Track/dummyemptyphoto.jpg",
     cover: "https://slspstudios-sudo.github.io/G-Release-Track/dummyemptyphoto.jpg"
   },
   {
-    title: "Dummy Song 2",
-    artist: "Artist 2",
-    year: "2023",
-    mix: "Radio Edit",
+    title: "Hexagon Heart",
+    artist: "Chris G SLS",
+    year: "2024",
+    mix: "(Original Mix)",
     duration: "4:10",
     file: "https://slspstudios-sudo.github.io/G-Release-Track/dummyemptyphoto.jpg",
     cover: "https://slspstudios-sudo.github.io/G-Release-Track/dummyemptyphoto.jpg"
@@ -193,6 +193,7 @@ audio.onended = () => {
     }
   }
 };
+
 
 
 
