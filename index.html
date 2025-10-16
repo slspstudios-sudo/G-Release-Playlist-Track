@@ -65,6 +65,19 @@ body { font-family: Arial; margin:0; padding:0; background:#f5f5f5; }
   </div>
 </div>
 
+  <!-- Cover Fade FX -->
+<style>
+/* Fade za cover sliku */
+#cover-img {
+  transition: opacity 0.6s ease-in-out;
+  opacity: 1;
+}
+.fade-out {
+  opacity: 0;
+}
+
+
+  
 <!-- Expandable playlist -->
 <div class="expand-area" id="expand-area">
   <ul id="full-playlist"></ul>
@@ -97,6 +110,7 @@ audio.ontimeupdate = () => {
 
 </body>
 </html>
+
 
 
 
