@@ -106,16 +106,7 @@ function playSong(index) {
     return;
   }
 
-// Fade cover
-coverImg.classList.add('fade-out'); // počni fade-out
-setTimeout(() => {
-  coverImg.src = song.cover + "?t=" + new Date().getTime(); // osvježi cache
-  coverImg.alt = song.title;
-  coverImg.classList.remove('fade-out'); // fade-in
-}, 300); // trajanje fade efekta u ms
-
-
-  
+ 
   // Postavi izvor i metapodatke
   audio.src = song.file;
   audio.load(); // prisilno učitavanje
@@ -245,6 +236,7 @@ audio.onended = () => {
     }
   }
 };
+
 
 
 
