@@ -22,6 +22,24 @@ const playlist = [
     file: "https://slspstudios-sudo.github.io/G-Release-Track/dummyemptyphoto.jpg",
     cover: "https://slspstudios-sudo.github.io/G-Release-Track/dummyemptyphoto.jpg"
   },
+    {
+    title: "Track 2",
+    artist: "Chris G SLS",
+    year: "2025",
+    mix: "(Original Mix)",
+    duration: "2:30",
+    file: "https://slspstudios-sudo.github.io/G-Release-Track/dummyemptyphoto.jpg",
+    cover: "https://slspstudios-sudo.github.io/G-Release-Track/dummyemptyphoto.jpg"
+  },
+    {
+    title: "Track 5",
+    artist: "Chris G SLS",
+    year: "2025",
+    mix: "(Original Mix)",
+    duration: "2:30",
+    file: "https://slspstudios-sudo.github.io/G-Release-Track/dummyemptyphoto.jpg",
+    cover: "https://slspstudios-sudo.github.io/G-Release-Track/dummyemptyphoto.jpg"
+  },
   {
     title: "Hexagon Heart",
     artist: "Chris G SLS",
@@ -92,12 +110,16 @@ function playSong(index) {
   audio.src = song.file;
   audio.load(); // prisilno učitavanje
 
-  // Postavi naslov i sliku
-  if (trackTitle) trackTitle.textContent = `${song.title} - ${song.artist}`;
-  if (coverImg) {
+  // Postavi naslov i sliku s efektom fade
+if (trackTitle) trackTitle.textContent = `${song.title} - ${song.artist}`;
+if (coverImg) {
+  coverImg.classList.add("fade-out");
+  setTimeout(() => {
     coverImg.src = song.cover + "?t=" + new Date().getTime(); // osvježi cache
     coverImg.alt = song.title;
-  }
+    coverImg.onload = () => coverImg.classList.remove("fade-out");
+  }, 300);
+}
 
   // Pokreni pjesmu automatski
   audio.play().then(() => {
@@ -213,6 +235,7 @@ audio.onended = () => {
     }
   }
 };
+
 
 
 
