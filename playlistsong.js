@@ -9,7 +9,7 @@ const playlist = [
     artist: "Chris G SLS",
     year: "2024",
     mix: "(Original Mix)",
-    duration: "3:45",
+    duration: "3:20",
     file: "https://raw.githubusercontent.com/slspstudios-sudo/G-Release-Track/main/Tears%20in%20rain.%20100bpm%2C%20Bmin%20(Master).mp3",
     cover: "https://raw.githubusercontent.com/slspstudios-sudo/G-Release-Track/main/Chris%20G%20SLS%20-%20Tears%20in%20Rain.jpg"
   },
@@ -78,17 +78,37 @@ let repeatMode = 0; // 0=off,1=once,2=all
 let shuffleMode = false;
 
 // Play odabranu pjesmu
+// ✅ Ispravljena playSong funkcija
 function playSong(index) {
   currentIndex = index;
   const song = playlist[currentIndex];
+
+  if (!audio) {
+    console.error("Audio element not found!");
+    return;
+  }
+
+  // Postavi izvor i metapodatke
   audio.src = song.file;
-  trackTitle.textContent = `${song.title} - ${song.artist}`;
-  coverImg.src = song.cover;
-  audio.play();
-  isPlaying = true;
-  playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-  // show playlist dolje
-  expandArea.style.maxHeight = "300px";
+  audio.load(); // prisilno učitavanje
+
+  // Postavi naslov i sliku
+  if (trackTitle) trackTitle.textContent = `${song.title} - ${song.artist}`;
+  if (coverImg) {
+    coverImg.src = song.cover + "?t=" + new Date().getTime(); // osvježi cache
+    coverImg.alt = song.title;
+  }
+
+  // Pokreni pjesmu automatski
+  audio.play().then(() => {
+    isPlaying = true;
+    if (playBtn) playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+  }).catch(err => {
+    console.warn("Autoplay blocked by browser, user must click Play:", err);
+  });
+
+  // Prikaži playlistu ispod
+  if (expandArea) expandArea.style.maxHeight = "300px";
 }
 
 // Toggle Play / Pause
@@ -193,6 +213,7 @@ audio.onended = () => {
     }
   }
 };
+
 
 
 
