@@ -10,7 +10,7 @@ const playlist = [
     year: "2024",
     mix: "(Original Mix)",
     duration: "3:45",
-    file: "https://raw.githubusercontent.com/slspstudios-sudo/G-Release-Track/main/Tears%20in%20rain.%20100bpm%2C%20Bmin%20(Master).mp3g",
+    file: "https://raw.githubusercontent.com/slspstudios-sudo/G-Release-Track/main/Tears%20in%20rain.%20100bpm%2C%20Bmin%20(Master).mp3",
     cover: "https://raw.githubusercontent.com/slspstudios-sudo/G-Release-Track/main/Chris%20G%20SLS%20-%20Tears%20in%20Rain.jpg"
   },
   {
@@ -193,6 +193,7 @@ audio.onended = () => {
     }
   }
 };
+
 
 
 
